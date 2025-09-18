@@ -2,6 +2,7 @@
 
 <group ns = "driver">
         <node pkg="lab1" name="driver_node" type="mmdriver.py" output="screen"/>
+        <!--node pkg="rqt_graph" name="rqt_graph" type="rqt_graph"/-->
         <!--Starts the driver node-->
 
 </group>
