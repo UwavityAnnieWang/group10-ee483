@@ -53,23 +53,26 @@ if __name__ == "__main__": ## The main function which will be called when your p
         # Keep the line above - you might be able to reduce the delay a bit,
         cycles_max = 4
         cycle = 0
-        startTime = rospy.Time.now().to_sec()
-        print(startTime)
+        #startTime = rospy.Time.now().to_sec()
+        #print(startTime)
         while not rospy.is_shutdown() and cycle < cycles_max: # Run ros forever - you can change
             # this as well instead of running forever
             drive.drive()
-            while rospy.Time.now().to_sec() < float(startTime + 2 + cycle*13):
-                pass
+            rospy.sleep(2)
+            #while rospy.Time.now().to_sec() < float(startTime + 2 + cycle*13):
+                #pass
             drive.stop()
-            while rospy.Time.now().to_sec() < float(startTime + 7 + cycle*13):
-                pass
+            rospy.sleep(5)
+            #while rospy.Time.now().to_sec() < float(startTime + 7 + cycle*13):
+                #pass
             drive.turn()
-            moveTime = rospy.Time.now()
-            while rospy.Time.now().to_sec() < float(startTime + 8 + cycle*13):
-                pass
+            rospy.sleep(1.5)
+            #while rospy.Time.now().to_sec() < float(startTime + 8 + cycle*13):
+                #pass
             drive.stop()
-            while rospy.Time.now().to_sec() < float(startTime + 13 + cycle*13):
-                pass
+            rospy.sleep(5)
+            #while rospy.Time.now().to_sec() < float(startTime + 13 + cycle*13):
+                #pass
             cycle += 1
     except rospy.ROSInterruptException:
         pass
