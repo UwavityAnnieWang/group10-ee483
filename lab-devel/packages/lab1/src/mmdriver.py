@@ -21,18 +21,44 @@ class Driver():#CHANGE CLASSNAME to the name of your class
         #/ee483mm/wheels_driver_node is the topic being published to 
         self.cmdDrive = WheelsCmdStamped()
         self.cmdDrive.header.stamp = rospy.Time.now()
-        self.cmdDrive.vel_left = 0.4
-        self.cmdDrive.vel_right= 0.4
+        self.cmdDrive.vel_left = 0.5
+        self.cmdDrive.vel_right= 0.5
         self.drivePub.publish(self.cmdDrive)
         print("Driving the MM " + self.veh_name + " around the block") # Just for testin
 
-    def turn(self):
+        startTime = rospy.Time.now().to_sec()
+        funcTime = 2.5
+
+        while rospy.Time.now().to_sec() < float(startTime + funcTime):
+                self.drivePub.publish(self.cmdDrive)
+
+    def turnEnd(self):
         self.cmdTurn = WheelsCmdStamped()
         self.cmdTurn.header.stamp = rospy.Time.now()
-        self.cmdTurn.vel_left = 0.3
-        self.cmdTurn.vel_right = -0.3
+        self.cmdTurn.vel_left = 0.7
+        self.cmdTurn.vel_right = 0
         self.drivePub.publish(self.cmdTurn)
         print("turning")
+
+        startTime = rospy.Time.now().to_sec()
+        funcTime = .8
+
+        while rospy.Time.now().to_sec() < float(startTime + funcTime):
+                self.drivePub.publish(self.cmdTurn)
+
+    def turnMid(self):
+        self.cmdTurn = WheelsCmdStamped()
+        self.cmdTurn.header.stamp = rospy.Time.now()
+        self.cmdTurn.vel_left = 0.7
+        self.cmdTurn.vel_right = 0
+        self.drivePub.publish(self.cmdTurn)
+        print("turning")
+
+        startTime = rospy.Time.now().to_sec()
+        funcTime = .7
+
+        while rospy.Time.now().to_sec() < float(startTime + funcTime):
+                self.drivePub.publish(self.cmdTurn)
 
     def stop(self):
         self.cmdSleep = WheelsCmdStamped()
@@ -42,12 +68,18 @@ class Driver():#CHANGE CLASSNAME to the name of your class
         self.drivePub.publish(self.cmdSleep)
         print("stopped")
 
+        startTime = rospy.Time.now().to_sec()
+        funcTime = 2
+
+        while rospy.Time.now().to_sec() < float(startTime + funcTime):
+                self.drivePub.publish(self.cmdSleep)
+
 
 #WRITE THE CODE TO MAKE THE MM GO AROUND THE BLOCK
 if __name__ == "__main__": ## The main function which will be called when your python sc
 # Initialize the node
     try:
-        rospy.init_node('driving')
+        rospy.init_node('driver_node')
         drive = Driver() # Create obj of the Driver class
         rospy.sleep(3) # Delay to wait enough time for the code to run
         # Keep the line above - you might be able to reduce the delay a bit,
@@ -56,23 +88,18 @@ if __name__ == "__main__": ## The main function which will be called when your p
         #startTime = rospy.Time.now().to_sec()
         #print(startTime)
         while not rospy.is_shutdown() and cycle < cycles_max: # Run ros forever - you can change
-            # this as well instead of running forever
+
             drive.drive()
-            rospy.sleep(2)
-            #while rospy.Time.now().to_sec() < float(startTime + 2 + cycle*13):
-                #pass
+
             drive.stop()
-            rospy.sleep(5)
-            #while rospy.Time.now().to_sec() < float(startTime + 7 + cycle*13):
-                #pass
-            drive.turn()
-            rospy.sleep(1.5)
-            #while rospy.Time.now().to_sec() < float(startTime + 8 + cycle*13):
-                #pass
+
+            if cycle == 0 or cycle == 3:
+                drive.turnEnd()
+            else:
+                drive.turnMid()
+
             drive.stop()
-            rospy.sleep(5)
-            #while rospy.Time.now().to_sec() < float(startTime + 13 + cycle*13):
-                #pass
+
             cycle += 1
     except rospy.ROSInterruptException:
         pass
