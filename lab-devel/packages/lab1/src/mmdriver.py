@@ -32,7 +32,21 @@ class Driver():#CHANGE CLASSNAME to the name of your class
         while rospy.Time.now().to_sec() < float(startTime + funcTime):
                 self.drivePub.publish(self.cmdDrive)
 
-    def turnEnd(self):
+    def turnFirst(self):
+        self.cmdTurn = WheelsCmdStamped()
+        self.cmdTurn.header.stamp = rospy.Time.now()
+        self.cmdTurn.vel_left = 0.8
+        self.cmdTurn.vel_right = 0
+        self.drivePub.publish(self.cmdTurn)
+        print("turning")
+
+        startTime = rospy.Time.now().to_sec()
+        funcTime = .8
+
+        while rospy.Time.now().to_sec() < float(startTime + funcTime):
+                self.drivePub.publish(self.cmdTurn)
+
+    def turnOther(self):
         self.cmdTurn = WheelsCmdStamped()
         self.cmdTurn.header.stamp = rospy.Time.now()
         self.cmdTurn.vel_left = 0.7
@@ -46,20 +60,6 @@ class Driver():#CHANGE CLASSNAME to the name of your class
         while rospy.Time.now().to_sec() < float(startTime + funcTime):
                 self.drivePub.publish(self.cmdTurn)
 
-    def turnMid(self):
-        self.cmdTurn = WheelsCmdStamped()
-        self.cmdTurn.header.stamp = rospy.Time.now()
-        self.cmdTurn.vel_left = 0.7
-        self.cmdTurn.vel_right = 0
-        self.drivePub.publish(self.cmdTurn)
-        print("turning")
-
-        startTime = rospy.Time.now().to_sec()
-        funcTime = .7
-
-        while rospy.Time.now().to_sec() < float(startTime + funcTime):
-                self.drivePub.publish(self.cmdTurn)
-
     def stop(self):
         self.cmdSleep = WheelsCmdStamped()
         self.cmdSleep.header.stamp = rospy.Time.now()
@@ -69,7 +69,7 @@ class Driver():#CHANGE CLASSNAME to the name of your class
         print("stopped")
 
         startTime = rospy.Time.now().to_sec()
-        funcTime = 2
+        funcTime = 5
 
         while rospy.Time.now().to_sec() < float(startTime + funcTime):
                 self.drivePub.publish(self.cmdSleep)
@@ -93,7 +93,7 @@ if __name__ == "__main__": ## The main function which will be called when your p
 
             drive.stop()
 
-            if cycle == 0 or cycle == 3:
+            if cycle == 0:
                 drive.turnEnd()
             else:
                 drive.turnMid()
