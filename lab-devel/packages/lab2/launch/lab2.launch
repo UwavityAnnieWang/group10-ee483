@@ -1,0 +1,11 @@
+<launch>
+
+<group ns = "driver">
+        <node pkg="lab2" name="image_detector" type="lanedetector.py" output="screen"/>
+        <!-- <node pkg="rqt_image_view" type="rqt_image_view" name="image_view" args="/cropped"/>
+        <node pkg="rqt_image_view" type="rqt_image_view" name="image_view_cropped" args="/mask1"/>
+        <node pkg="rqt_image_view" type="rqt_image_view" name="image_view_white" args="/mask2"/> -->
+        <!--Starts the driver node-->
+
+</group>
+</launch>
