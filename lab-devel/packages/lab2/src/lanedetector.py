@@ -21,7 +21,7 @@ class LaneDetector:
         self.pub_detection = rospy.Publisher("/detection", Image, queue_size=10)
     def flipper_cb(self, msg):
         # convert to a ROS image using the bridge
-        rospy.loginfo("Successfully run")
+        #rospy.loginfo("Successfully run")
         cv_img = self.bridge.compressed_imgmsg_to_cv2(msg, 'bgr8')
         #crop
         height = cv_img.shape[0]
@@ -30,24 +30,34 @@ class LaneDetector:
         self.pub_crop.publish(ros_cropped)
 
 
-        mask1(ros_cropped)
 
         #filters
         hsv_image = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
 
-        white_filter = cv2.inRange(hsv_image, (0,0,159), (127,76, 255))
-        ros_white_filter =self.bridge.cv2_to_imgmsg(white_filter, "mono8")
-        self.pub_mask1.publish(ros_white_filter)
-
-        yellow_filter = cv2.inRange(hsv_image, (0,66,92), (72,156,255))
-        ros_yellow_filter =self.bridge.cv2_to_imgmsg(yellow_filter, "mono8")
-        self.pub_mask2.publish(ros_yellow_filter)
         
-        rospy.loginfo("Successfully finish")
-    # def mask1(self, msg):
-    #     white_filter = cv2.inRange(hsv_image, (0,0,159), (127,76, 255))
-    #     ros_white_filter =self.bridge.cv2_to_imgmsg(white_filter, "mono8")
-    #     self.pub_mask1.publish(ros_white_filter)
+        #erosion kernel 
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3,3))
+        
+        #Original values for white 
+        #(0,0,159)(127,76,255)
+        white_filter = cv2.inRange(hsv_image, (0,0,180), (180,60, 255))
+        yellow_filter = cv2.inRange(hsv_image, (0,66,92), (72,156,255))
+        
+        #applying erosion to the yellow and white masks 
+        image_erode1=cv2.erode(white_filter, kernel)
+        image_erode2=cv2.erode(yellow_filter, kernel)
+        ros_yellow_filter=self.bridge.cv2_to_imgmsg(image_erode2, "mono8")
+        ros_white_filter=self.bridge.cv2_to_imgmsg(image_erode1, "mono8")
+
+
+        #ros_yellow_filter =self.bridge.cv2_to_imgmsg(yellow_filter, "mono8")
+        #ros_white_filter =self.bridge.cv2_to_imgmsg(white_filter, "mono8")
+        
+        #publishing the masks 
+        self.pub_mask2.publish(ros_yellow_filter)
+        self.pub_mask1.publish(ros_white_filter)
+        #rospy.loginfo("Successfully finish")
+   
 
 
 
