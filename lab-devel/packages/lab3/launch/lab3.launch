@@ -10,6 +10,11 @@
     <node pkg="lab3" name="average_phi" type="moving_avg.py" output="screen"/>
     <!--node pkg="lab3" name="pid_control" type="lane_control.py" output="screen"/-->
 
+    <param name="Kp" type="double" value="2"/>
+    <param name="Ki" type="double" value=".01"/>
+    <param name="Kd" type="double" value=".1"/>
+    <param name="v" type="double" value="0.0"/>
+
     <include file="$(find led_emitter)/launch/led_emitter_node.launch">
 
         <arg name="veh" value="$(env VEHICLE_NAME)"/>
