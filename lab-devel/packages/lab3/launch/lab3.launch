@@ -10,8 +10,8 @@
     <node pkg="lab3" name="average_phi" type="moving_avg.py" output="screen"/>
     <!--node pkg="lab3" name="pid_control" type="lane_control.py" output="screen"/-->
 
-    <param name="Kp" type="double" value="2"/>
-    <param name="Ki" type="double" value=".01"/>
+    <param name="Kp" type="double" value="3.5"/>
+    <param name="Ki" type="double" value=".05"/>
     <param name="Kd" type="double" value=".1"/>
     <param name="v" type="double" value="0.0"/>
 

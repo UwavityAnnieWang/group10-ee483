@@ -22,9 +22,10 @@ class Filter:
         self.avgArray = [0,0,0]
         self.erroray=[]
 
-        self.kp= rospy.get_param("Kp")
-        self.ki= rospy.get_param("Ki")
-        self.kd= rospy.get_param("Kd")
+        self.kp= rospy.get_param("/Kp")
+        self.ki= rospy.get_param("/Ki")
+        self.kd= rospy.get_param("/Kd")
+        self.v= rospy.get_param("/v")
 
         self.e_prev = 0.0
         self.i_term = 0.0
@@ -33,6 +34,11 @@ class Filter:
         print("here")
 
     def callback(self, msg):
+        self.kp= rospy.get_param("/Kp")
+        self.ki= rospy.get_param("/Ki")
+        self.kd= rospy.get_param("/Kd")
+        self.v= rospy.get_param("/v")
+
         i = 0
         while i < len(self.avgArray):
             if i != len(self.avgArray)-1:
@@ -66,14 +72,16 @@ class Filter:
         control=(kp*self.erroray[(len(self.erroray)-1)])+(ki*inte)+(kd*dx)
         print(control)
         '''
+        print(self.i_term)
 
         self.e_prev = error
         self.t_prev = now
 
         car_cmd = Twist2DStamped()
-        car_cmd.v = 0
+        car_cmd.v = self.v
         car_cmd.omega = control
         self.controlinput.publish(car_cmd)
+ 
 
 
 if __name__=="__main__":
