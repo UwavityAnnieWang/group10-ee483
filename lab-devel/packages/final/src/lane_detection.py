@@ -103,20 +103,14 @@ class LaneDetector:
 		#publishing combined results to the relevant topic 
 		self.pub_detection.publish(combined4)
 
-
-
 		#publishing the cropped image to the relevant topic 
 		self.pub_crop.publish(ros_cropped)
-
-
 
 		#converting filters to image messages 
 		ros_yellow_filter=self.bridge.cv2_to_imgmsg(image_erode2, "mono8")
 		ros_white_filter=self.bridge.cv2_to_imgmsg(image_erode1, "mono8")
 		ros_red_filter=self.bridge.cv2_to_imgmsg(image_erode3, "mono8")
 
-
-		
 		#publishing the masks to relevant topics 
 		self.pub_mask3.publish(ros_red_filter)
 		self.pub_mask2.publish(ros_yellow_filter)
@@ -126,8 +120,6 @@ class LaneDetector:
 		#rospy.loginfo("Successfully finish")
    
 		self.pub_crop.publish(ros_cropped)
-
-
 	
 
 if __name__=="__main__":
