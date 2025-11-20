@@ -89,6 +89,48 @@ class LaneDetector:
 		lines1=cv2.HoughLinesP(combined1, 1, np.pi/180, 40, minLineLength=20, maxLineGap=5)
 		lines2=cv2.HoughLinesP(combined2, 1, np.pi/180, 40, minLineLength=20, maxLineGap=5)
 		lines3=cv2.HoughLinesP(combined3, 1, np.pi/180, 40, minLineLength=20, maxLineGap=5)
+		
+		# Finding the start and end coordinates of each line
+		#N1 = lines1.shape(0)
+		#N2 = lines2.shape(0)
+		#N3 = lines3.shape(0)
+
+		#for i in range(N1):
+			#x1_1 = lines1[i][0][0]
+			#y1_1 = lines1[i][0][1]
+			#x2_1 = lines1[i][0][2]
+			#y2_1 = lines1[i][0][3]
+		
+		#line1_length = int((x2_1^2-x1_1^2)+(y2_1^2-y1_1^2)^.5)
+
+		#j = 0
+		#hile j < line1_length
+			#x_line1 = x1_1 + j*(x2_1-x1_1)/line1_length
+			#y_line1 = y1_1 + j*(y2_1-y1_1)/line1_length
+			#j += 1
+
+		# Camera intrinsics
+	#W, H = 3280 // 2,  2464 // 2
+	# F = 270
+	#F = 1.79
+	#K = np.array([[F, 0, W // 2], [0, F, H // 2], [0, 0, 1]])
+
+
+	#Kinv = np.linalg.inv(K)
+
+	#R = 
+
+		#for i in range(N2):
+			#x1_2 = lines2[i][0][0]
+			#y1_2 = lines2[i][0][1]
+			#x2_2 = lines2[i][0][2]
+			#y2_2 = lines2[i][0][3]
+
+		#for i in range(N1):
+			#x1_3 = lines3[i][0][0]
+			#y1_3 = lines3[i][0][1]
+			#x2_3 = lines3[i][0][2]
+			#y2_3 = lines3[i][0][3]
 
 		
 		#applying lines to image from each filter 

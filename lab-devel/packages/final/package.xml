@@ -52,12 +52,15 @@
   <build_depend>duckietown_msgs</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>sensor_msgs</build_depend>
+  <build_depend>ground_projection</build_depend>
   <build_export_depend>duckietown_msgs</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>ground_projection</build_export_depend>
   <exec_depend>duckietown_msgs</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>ground_projection</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

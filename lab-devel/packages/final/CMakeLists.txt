@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   duckietown_msgs
   rospy
   sensor_msgs
+  ground_projection
 )
 
 ## System dependencies are found with CMake's conventions
