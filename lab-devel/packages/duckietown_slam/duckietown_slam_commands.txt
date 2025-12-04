@@ -1,0 +1,37 @@
+Duckietown SLAM commands
+Open three terminals under the lab-devel folder
+
+1. Terminal 1
+    
+    dts devel run –H ee4833mm[number].local -s –M –cmd bash
+    
+    quackquack
+    
+    catkin build duckietown_slam
+    
+    source /code/catkin_ws/devel/setup.bash
+    
+    roslaunch duckietown_slam duckietown_slam.launch
+    
+    (seeing “SLAM initialized…” means it’s running)
+    
+2. Terminal 2
+    
+    dts start_gui_tools ee483mm[number]
+    
+    rosrun rviz rviz
+    
+3. Terminal 3
+    
+    dts duckiebot keyboard_control ee483mm[number]
+
+
+In the rviz
+- Click "Add" at bottom left
+- Add these displays:
+    1. Add "Map"
+        - Set Topic to "/map"
+    2. Add "TF"
+    3. Add "Image" (optional)
+        - Set Topic to "/ee483mm<number>/...."
+- Set "Fixed Frame" in Global Options to "map"

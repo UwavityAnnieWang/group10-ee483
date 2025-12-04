@@ -1,0 +1,34 @@
+# SLAM Parameters
+slam_node:
+  # Map parameters
+  map_update_rate: 1.0
+  map_resolution: 0.05
+  map_width: 20.0
+  map_height: 20.0
+  loop_closure_distance: 1.0
+
+  # Solver parameters
+  solver_plugin: solver_plugins::CeresSolver
+  ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+  ceres_preconditioner: JACOBI
+  ceres_trust_strategy: LEVENBERG_MARQUARDT
+  ceres_loss_function: None
+
+# Lane detector parameters  
+lane_detector_node:
+  roi_top_crop: 0.5
+  min_line_length: 30
+  max_line_gap: 10
+
+# Depth to scan parameters
+depth_to_scan_node:
+  scan_fov: 0.4
+  scan_resolution: 0.01
+  min_range: 0.02
+  max_range: 1.0
+
+# Visualization parameters
+map_visualizer_node:
+  visualization_rate: 2.0
+  show_lanes: true
+  show_trajectory: true

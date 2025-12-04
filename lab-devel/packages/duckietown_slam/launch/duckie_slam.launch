@@ -1,0 +1,31 @@
+<launch>
+    <!-- Get environment variable, fallback to default value -->
+    <arg name="veh" default="$(env VEHICLE_NAME)" doc="Name of vehicle. Defaults to environment variable."/>
+
+    <!-- SLAM Parameters -->
+    <group ns="$(arg veh)">
+        <node pkg="duckietown_slam" type="duckie_slam.py" name="duckietown_slam_node" output="screen">
+            <!-- General SLAM params -->
+            <param name="scan_buffer_size" value="10"/>
+            <param name="loop_search_distance" value="2.0"/>
+            <param name="loop_match_threshold" value="0.7"/>
+            <param name="min_displacement" value="0.1"/>
+            <param name="map_update_interval" value="1.0"/>
+            <param name="transform_publish_period" value="0.05"/>
+
+            <!-- Map parameters -->
+            <param name="map_resolution" value="0.01"/>
+            <param name="map_width" value="1000"/>
+            <param name="map_height" value="1000"/>
+            <param name="map_origin_x" value="-25.0"/>
+            <param name="map_origin_y" value="-25.0"/>
+
+            <!-- TF frames -->
+            <param name="map_frame" value="map"/>
+            <param name="odom_frame" value="$(arg veh)/odom"/>
+            <param name="base_frame" value="$(arg veh)/base_link"/>
+            <param name="camera_frame" value="$(arg veh)/camera_optical_frame"/>
+        </node>
+    </group>
+
+</launch>

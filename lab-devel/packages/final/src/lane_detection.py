@@ -6,6 +6,7 @@ import numpy as np
 import cv2
 from sensor_msgs.msg import Image
 from sensor_msgs.msg import CompressedImage
+from duckietown_msgs.msg import (Pixel, Vector2D, Segment, SegmentList)
 import os
 from cv_bridge import CvBridge
 from message_filters import ApproximateTimeSynchronizer, Subscriber
@@ -15,16 +16,17 @@ class LaneDetector:
 		# Instatiate the converter class once by using a class member
 		self.bridge = CvBridge()
 		#rospy.Subscriber("image", Image, self.flipper_cb)
-		rospy.Subscriber("/ee483mm10/camera_node/image/compressed", CompressedImage, self.callback, queue_size=1, buff_size=10000000) #BUFF SIZE 10MB
 		self.pub_crop = rospy.Publisher("/cropped", Image, queue_size=10)
 		self.pub_mask1 = rospy.Publisher("/mask1", Image, queue_size=10)
 		self.pub_mask2 = rospy.Publisher("/mask2", Image, queue_size=10)
 		self.pub_mask3 = rospy.Publisher("/mask3", Image, queue_size=10)
 		self.pub_detection = rospy.Publisher("/detection", Image, queue_size=10)
-		""" self.sub_crop=Subscriber("/cropped", Image)
-		self.sub_detection=Subscriber("/detection", Image)
-		self.ats=ApproximateTimeSynchronizer([self.sub_crop, self.sub_detection], queue_size=5, slop=0.1)
-		self.ats.registerCallback(self.callback) """
+
+		self.sub_image=Subscriber("/ee483mm10/camera_node/image/compressed", CompressedImage)
+		self.sub_projection=Subscriber("/ee483m10/ground_projection_node/lineseglist_out", SegmentList)
+		self.ats=ApproximateTimeSynchronizer([self.sub_image, self.sub_projection], queue_size=5, slop=0.1)
+		self.ats.registerCallback(self.callback)
+
 	def output_lines(self, original_image, lines, color):
 		output = np.copy(original_image)
 		if lines is not None:
@@ -39,6 +41,7 @@ class LaneDetector:
 			
 				cv2.circle(output, (l[2],l[3]), 2, (0,0,255))
 		return output
+
 	def callback(self, msg):
 		# convert to a ROS image using the bridge
 		#rospy.loginfo("Successfully run")

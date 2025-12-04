@@ -1,0 +1,13 @@
+<launch>
+  <include file="$(find ground_projection)/launch/ground_projection_node.launch">
+    <arg name="veh" value="casagoesdb04"/>
+  </include>
+
+  <include file="$(find line_detector)/launch/line_detector_node.launch">
+    <arg name="veh" value="casagoesdb04"/>
+  </include>
+
+    <node pkg="slam_toolbox" type="localization_slam_toolbox_node" name="slam_toolbox" output="screen">
+    <rosparam command="load" file="$(find slam_toolbox)/config/mapper_params_localization.yaml" />
+  </node>
+</launch>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Arguments -->
+    <arg name="veh" default="$(env VEHICLE_NAME)" doc="Name of vehicle. ex: megaman"/>
+    
+    <!-- Multi-color lane detector node -->
+    <node pkg="duckietown_slam" type="lanedetector.py" name="multi_color_lane_detector" output="screen">
+        <remap from="~lines" to="lane_detector_node/debug/lines"/>
+    </node>
+
+    <!-- TF Tree Setup -->
+    <!-- map -> odom --> 
+    <node pkg="tf" type="static_transform_publisher" name="map_to_odom" 
+        args="-5 -5 0 0 0 0 map odom 100"/>
+        
+    <!-- odom -> base_link -->
+    <node pkg="tf" type="static_transform_publisher" name="odom_to_base" 
+        args="0 0 0 0 0 0 odom base_link 100"/>
+        
+    <!-- base_link -> camera_frame -->
+    <node pkg="tf" type="static_transform_publisher" name="base_to_camera" 
+        args="0.1 0 0.1 0 -0.2 0 base_link camera_frame 100"/>
+
+    <!-- Pose to TF broadcaster -->
+    <node pkg="tf" type="static_transform_publisher" name="base_tf_broadcaster" 
+        args="0 0 0 0 0 0 base_link footprint 100"/>
+
+    <!-- Wheel odometry to pose converter -->
+    <node pkg="duckietown_slam" type="odom.py" name="wheel_odom_to_pose_converter" output="screen">
+        <param name="wheel_radius" value="0.0318"/>
+        <param name="wheel_base" value="0.1"/>
+        <param name="ticks_per_revolution" value="135"/>
+    </node>
+
+    <!-- Visual SLAM mapper node -->
+    <node pkg="duckietown_slam" type="duckietown_slam2.py" name="visual_slam_mapper" output="screen">
+        <param name="map_resolution" value="0.025"/>
+        <param name="map_width" value="400"/> 
+        <param name="map_height" value="400"/>
+        <param name="camera_frame" value="camera_frame"/>
+        <param name="base_frame" value="base_link"/>
+    </node>
+
+    <!-- Lane monitor -->
+    <node pkg="duckietown_slam" type="lanemonitor.py" name="lane_monitor" output="screen"/>
+
+    <!-- ROS parameters -->
+    <param name="/use_sim_time" value="false"/>
+    <param name="/global_frame" value="map"/>
+</launch>

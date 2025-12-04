@@ -1,0 +1,28 @@
+<launch>
+    <!-- SLAM toolbox -->
+    <include file="$(find slam_toolbox)/launch/online_async.launch"/>
+    
+    <!-- Ground projection -->  
+    <!-- <node pkg="ground_projection_pkg" type="ground_projection_node.py" name="ground_projection_node" output="screen">
+        <remap from="~camera_info" to="/casagoesdb04/camera_node/camera_info"/>
+        <remap from="~image" to="/casagoesdb04/camera_node/image/compressed"/>
+    </node> -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom 30" /> -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="base_link_broadcaster" args="0 0 0 0 0 0 odom base_link 100" /> -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="laser_link_broadcaster" args="0 0 0 0 0 0 base_link laser 100" /> -->
+
+
+    <!-- Camera node -->
+    <node pkg="duckietown_slam" type="camera.py" name="duckietown_camera" output="screen">
+        <param name="scan_frame" value="laser"/>  <!-- Changed to match TF frame -->
+        <param name="scan_topic" value="scan"/>
+    </node>
+
+    <!-- Add odometry -->
+    <!-- <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"/> -->
+    <node pkg="duckietown_slam" type="odometry_publisher.py" name="odometry_publisher"/>
+    <!-- <node pkg="lab3" type="line_detection.py" name="line_detection" output="screen"/> -->
+
+    
+    
+</launch>

@@ -1,0 +1,18 @@
+<launch>
+    <!-- Arguments -->
+    <arg name="veh"/>
+
+    <!-- rqt_image_view for lane detection visualization -->
+    <node name="lane_view" pkg="rqt_image_view" type="rqt_image_view" 
+          args="/$(arg veh)/lane_detector_node/debug/lines"/>
+
+    <!-- rqt_image_view for raw camera feed -->
+    <node name="camera_view" pkg="rqt_image_view" type="rqt_image_view" 
+          args="/$(arg veh)/camera_node/image/compressed"/>
+
+    <!-- Run the map_server for visualization -->
+    <node name="map_saver" pkg="map_server" type="map_saver" args="-f $(find duckietown_slam)/maps/slam_map">
+        <remap from="map" to="/map"/>
+    </node>
+
+</launch>

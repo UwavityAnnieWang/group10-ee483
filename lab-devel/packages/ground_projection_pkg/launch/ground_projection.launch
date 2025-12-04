@@ -1,0 +1,6 @@
+<launch>
+
+   <node pkg="ground_projection_pkg" type="ground_projection_node.py" name="ground_projection_node" output="screen">
+    <remap from="~camera_info" to="/casagoesdb04/camera_node/camera_info"/>
+    <remap from="~image" to="/casagoesdb04/camera_node/image/compressed"/>
+</node>

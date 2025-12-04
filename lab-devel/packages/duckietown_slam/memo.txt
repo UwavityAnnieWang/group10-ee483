@@ -1,0 +1,26 @@
+caution: some parts of the final project code are hardcoded with casagoesdb04
+
+packages for the final project:
+1. duckietown_slam
+   * where all the launch files are
+   * launchers are in one of the parent folder
+2. ground_projection
+   * one of the packages from dt-core, duckietown
+3. slam_toolbox (slam_toolbox, slam_toolbox_msgs
+   * used online_async mode
+   * tag: noetic-devel
+
+* there is line_detection package offered by dt-core, duckietown as well
+   
+process:
+* added rviz, slam_toolbox, etc. in the independecies.txt
+* not sure if slam_toolbox is working 
+  (might have tested with command " roslaunch slam_toolbox slam_toolbox.launch",
+  which is not a proper name of launch file in it)
+* from one node attempt to using the packages above
+* then from using camera to using tof sensor
+
+results:
+* videos of results are on YouTube
+* slide included
+* tried recording our presentation with GoPro but forgot to plug in the SD card

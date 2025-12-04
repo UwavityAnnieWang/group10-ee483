@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Arguments -->
+    <arg name="veh" default="$(env VEHICLE_NAME)" doc="Name of vehicle. ex: megaman"/>
+    <arg name="map_size" default="50.0" doc="Size of map in meters"/>
+    <arg name="map_resolution" default="0.05" doc="Resolution of map in meters/pixel"/>
+
+    <!-- World to Map (outside vehicle namespace) -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_map"
+          args="0 0 0 0 0 0 world map"/>
+    
+    <!-- Group everything else under vehicle namespace -->
+    <group ns="$(arg veh)">
+        <!-- Map to Odom - connected to global map -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_odom"
+              args="0 0 0 0 0 0 map /$(arg veh)/odom"/>
+
+        <!-- Vehicle local transforms -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_baselink"
+              args="0 0 0.03 0 0 0 /$(arg veh)/odom /$(arg veh)/base_link"/>
+
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera"
+              args="0.1 0 0.1 0 0 0 /$(arg veh)/base_link /$(arg veh)/camera_frame"/>
+
+        <node pkg="tf2_ros" type="static_transform_publisher" name="camera_to_optical"
+              args="0 0 0 -1.5708 0 -1.5708 /$(arg veh)/camera_frame /$(arg veh)/camera_optical_frame"/>
+
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_tof"
+              args="0.1 0 0.1 0 0 0 /$(arg veh)/base_link /$(arg veh)/front_center_tof_frame"/>
+
+        <!-- Launch nodes with added delay -->
+        <!-- First launch depth to scan -->
+        <node pkg="duckietown_slam" type="depth_2_scan.py" name="depth_to_scan_node" 
+              output="screen" launch-prefix="bash -c 'sleep 5; $0 $@'">
+            <param name="scan_fov" value="0.4"/>
+            <param name="scan_resolution" value="0.01"/>
+            <param name="min_range" value="0.02"/>
+            <param name="max_range" value="1.0"/>
+        </node>
+
+        <!-- Then launch lane detector -->
+        <node pkg="duckietown_slam" type="slam_lanedetector.py" name="lane_detector_node" 
+              output="screen" launch-prefix="bash -c 'sleep 7; $0 $@'">
+            <param name="roi_top" value="0.5"/>
+            <param name="min_line_length" value="30"/>
+            <param name="max_line_gap" value="10"/>
+            <param name="publish_debug" value="true"/>
+        </node>
+
+        <!-- Finally launch SLAM node -->
+        <node pkg="duckietown_slam" type="slam.py" name="slam_node" 
+              output="screen" launch-prefix="bash -c 'sleep 10; $0 $@'">
+            <param name="map_resolution" value="$(arg map_resolution)"/>
+            <param name="map_width" value="$(arg map_size)"/>
+            <param name="map_height" value="$(arg map_size)"/>
+            <param name="log_odds_occ" value="0.85"/>
+            <param name="log_odds_free" value="-0.4"/>
+            <remap from="scan" to="depth_to_scan_node/scan"/>
+        </node>
+
+        <!-- Debug utilities -->
+        <!-- <node pkg="rostopic" type="rostopic" name="tf_debug" 
+              args="echo /tf" output="screen"/> -->
+
+        <!-- Disable simulation time -->
+        <param name="use_sim_time" value="false"/>
+    </group>
+</launch>

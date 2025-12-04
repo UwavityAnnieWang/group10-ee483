@@ -1,0 +1,5 @@
+<launch>
+    <!-- SLAM Node -->
+    <node pkg="duckietown_slam" type="duckietown_slam.py" name="duckietown_slam_node" output="screen">
+    </node>
+</launch>
