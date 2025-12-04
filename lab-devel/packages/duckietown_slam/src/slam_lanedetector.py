@@ -12,7 +12,7 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
 class EnhancedLaneDetector:
     def __init__(self):
-        self.veh = os.environ['VEHICLE_NAME']
+        self.veh = os.environ['VEHICLE_NAME']   #ee483mm10
         self.bridge = CvBridge()
         
         # TF setup
