@@ -75,7 +75,7 @@ class GroundProjectionNode:
                                            queue_size=1)
 
         # Subscribers
-        self.sub_camera_info = rospy.Subscriber("/casagoesdb04/camera_node/camera_info",    #ee483mm10
+        self.sub_camera_info = rospy.Subscriber("/ee483mm10/camera_node/camera_info", 
                                               CameraInfo, 
                                               self.camera_info_callback, 
                                               queue_size=1)
